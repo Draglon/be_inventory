@@ -1,6 +1,5 @@
 import express from "express";
 import mongoose from "mongoose";
-// import multer from "multer";
 import bodyParser from "body-parser";
 import cors from 'cors';
 
@@ -15,23 +14,12 @@ mongoose
   .catch((err) => { console.log('DB error', err) });
 
 const app = express();
-// const storage = multer.diskStorage({
-//   destination: (_, __, cb) => {
-//     cb(null, 'uploads/avatars');
-//   },
-//   filename: (_, file, cb) => {
-//     cb(null, file.originalname); 
-//   }
-// })
-
-// const upload = multer({ storage: storage, limits: { fileSize: 100000000 }});
 
 app.use(bodyParser.json({limit: "100mb", parameterLimit: 100000000}));
 app.use(bodyParser.urlencoded({limit: '100mb', extended: true, parameterLimit: 100000000}));
 
 app.use(express.json()); // reads JSON requests
 app.use(cors());
-// app.use('/uploads/avatars', express.static('uploads/avatars'));
 
 // login
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login)
@@ -39,15 +27,9 @@ app.post('/auth/login', loginValidation, handleValidationErrors, UserController.
 app.post('/auth/register', registerValidation, handleValidationErrors, UserController.register)
 // general information by user
 app.get('/auth/user', checkAuth, UserController.getMe)
-// upload avatar
-// app.post('/upload_avatar', checkAuth, upload.single('image'), (req, res) => {
-//   res.json({
-//     url: `/uploads/avatars/${req.file.originalname}`
-//   })
-// });
 
 // Start server
-app.listen(process.env.PORT || 4001, (error) => {
+app.listen(4004, (error) => {
   if (error) {
     return console.log(error);
   }

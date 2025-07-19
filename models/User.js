@@ -1,14 +1,6 @@
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
-  avatarUrl: {
-    type: String,
-    default: null,
-  },
-  userName: {
-    type: String,
-    required: true,
-  },
   email: {
     type: String,
     required: true,
