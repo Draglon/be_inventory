@@ -5,7 +5,7 @@ import cors from 'cors';
 
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
 import { registerValidation, loginValidation } from "./validations/userValidations.js";
-import { UserController } from "./controllers/index.js";
+import { UserController, ProductController, OrderController } from "./controllers/index.js";
 
 // Connecting to a database
 mongoose
@@ -27,6 +27,20 @@ app.post('/auth/login', loginValidation, handleValidationErrors, UserController.
 app.post('/auth/register', registerValidation, handleValidationErrors, UserController.register)
 // general information by user
 app.get('/auth/user', checkAuth, UserController.getMe)
+
+// fetch products
+app.get('/products', checkAuth, ProductController.fetch)
+// create product
+app.post('/products', checkAuth, ProductController.create)
+// delete product
+app.delete('/products/:id', checkAuth, ProductController.deleteProduct)
+
+// fetch orders
+app.get('/orders', checkAuth, OrderController.fetch)
+// create order
+app.post('/orders', checkAuth, OrderController.create)
+// delete order
+app.delete('/orders/:id', checkAuth, OrderController.deleteOrder)
 
 // Start server
 app.listen(4004, (error) => {
