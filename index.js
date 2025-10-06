@@ -2,7 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import cors from 'cors';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 
+import { currentTime } from "./lib/dateTime.js";
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
 import { registerValidation, loginValidation } from "./validations/userValidations.js";
 import { UserController, ProductController, OrderController } from "./controllers/index.js";
@@ -14,12 +17,38 @@ mongoose
   .catch((err) => { console.log('DB error', err) });
 
 const app = express();
-
 app.use(bodyParser.json({limit: "100mb", parameterLimit: 100000000}));
 app.use(bodyParser.urlencoded({limit: '100mb', extended: true, parameterLimit: 100000000}));
 
 app.use(express.json()); // reads JSON requests
-app.use(cors());
+app.use(cors()); // CORS
+
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"],
+      credentials: true
+  }
+});
+
+io.on('connection', (socket) => {
+  console.log('Новый клиент подключился');
+
+  // Отправляем текущее время клиенту при подключении
+  socket.emit('currentTime', currentTime());
+
+  // Периодическая отправка времени (например, каждую 1 секунду)
+  const timeInterval = setInterval(() => {
+    socket.emit('currentTime', currentTime());
+  }, 1000); // 1000 мс = 1 секунда
+
+  // Очистка интервала при отключении клиента
+  socket.on('disconnect', () => {
+    console.log('Клиент отключился');
+    clearInterval(timeInterval);
+  });
+});
 
 // login
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login)
@@ -43,7 +72,7 @@ app.post('/orders', checkAuth, OrderController.create)
 app.delete('/orders/:id', checkAuth, OrderController.deleteOrder)
 
 // Start server
-app.listen(4004, (error) => {
+server.listen(4004, (error) => {
   if (error) {
     return console.log(error);
   }
