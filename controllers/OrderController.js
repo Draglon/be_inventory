@@ -6,7 +6,7 @@ export const fetch = async (_, res) => {
 
     if (!orders) {
       return res.status(404).json({
-        message: 'Продукты отсутствуют',
+        message: 'There are no orders',
       })
     }
 
@@ -15,7 +15,7 @@ export const fetch = async (_, res) => {
     console.log(error);
 
     res.status(500).json({
-      message: 'Нет доступа',
+      message: 'No access',
     });
   }
 }
@@ -40,7 +40,7 @@ export const create = async (req, res) => {
     console.log(error);
 
     res.status(500).json({
-      message: 'Не удалось создать персональную информацию'
+      message: 'Failed to create personal information'
     })
   }
 }
@@ -49,11 +49,13 @@ export const deleteOrder = async (req, res) => {
   try {
     const orderId = req.params.id;
     await OrdersModel.findByIdAndDelete(orderId);
+
+    res.status(200).send(`Order with ID ${orderId} deleted successfully.`);
   } catch (error) {
     console.log(error);
 
     res.status(500).json({
-      message: 'Нет доступа',
+      message: 'No access',
     });
   }
 }
