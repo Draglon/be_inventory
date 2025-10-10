@@ -1,8 +1,12 @@
+import { filter, isEmpty } from "ramda";
+
 import ProductsModel from '../models/Products.js';
 
-export const fetch = async (_, res) => {
+export const fetch = async (req, res) => {
+  const filters = filter((value) => !isEmpty(value), req.query.filters);
+
   try {
-    const products = await ProductsModel.find({});
+    const products = await ProductsModel.find({ ...filters });
 
     if (!products) {
       return res.status(404).json({
@@ -10,7 +14,7 @@ export const fetch = async (_, res) => {
       })
     }
 
-    res.json(products);
+    res.status(200).json(products);
   } catch (error) {
     console.log(error);
 
@@ -47,7 +51,7 @@ export const create = async (req, res) => {
 
     const productsData = await products.save();
 
-    res.json(productsData);
+    res.status(200).json(productsData);
   } catch (error) {
     console.log(error);
 
