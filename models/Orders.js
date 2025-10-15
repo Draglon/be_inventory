@@ -19,9 +19,23 @@ const OrderSchema = new mongoose.Schema({
     default: Date.now,
   },
   products: [
-		{
-      type: String,
-      required: false,
+    {
+      price: [
+        {
+          "value": {
+            type: Number,
+            required: true,
+          },
+          "symbol": {
+            type: String,
+            required: true,
+          },
+          "isDefault": {
+            type: Number,
+            required: false,
+          }
+        },
+      ],
     },
   ],
 },

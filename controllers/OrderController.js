@@ -27,11 +27,13 @@ export const create = async (req, res) => {
       title,
       description,
       date,
+      products,
     } = req.body;
 
     orders.title = title;
     orders.description = description;
     orders.date = date;
+    orders.products = products;
 
     const ordersData = await orders.save();
 
