@@ -12,6 +12,7 @@ import { UserController, ProductController, OrderController } from "./controller
 
 // Connecting to a database
 mongoose
+  // .connect("mongodb://mongodb/Inventory")
   .connect("mongodb+srv://admin:draglon750@cluster0.znj5tnf.mongodb.net/Inventory?retryWrites=true&w=majority&appName=Cluster0")
   .then(() => { console.log('DB ok') })
   .catch((err) => { console.log('DB error', err) });
