@@ -11,9 +11,12 @@ import { registerValidation, loginValidation } from "./validations/userValidatio
 import { UserController, ProductController, OrderController } from "./controllers/index.js";
 
 // Connecting to a database
+const dbUrl = process.env.MONGO_URI || 'mongodb+srv://admin:draglon750@cluster0.znj5tnf.mongodb.net/Inventory?retryWrites=true&w=majority&appName=Cluster0';
 mongoose
-  // .connect("mongodb://mongodb/Inventory")
-  .connect("mongodb+srv://admin:draglon750@cluster0.znj5tnf.mongodb.net/Inventory?retryWrites=true&w=majority&appName=Cluster0")
+  .connect(dbUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(() => { console.log('DB ok') })
   .catch((err) => { console.log('DB error', err) });
 
@@ -73,7 +76,8 @@ app.post('/orders', checkAuth, OrderController.create)
 app.delete('/orders/:id', checkAuth, OrderController.deleteOrder)
 
 // Start server
-server.listen(4004, (error) => {
+const PORT = process.env.PORT || 4004;
+server.listen(PORT, (error) => {
   if (error) {
     return console.log(error);
   }
