@@ -15,7 +15,7 @@
   "author": "Nazarchuk Sergey",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "bcrypt": "^6.0.0",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "express": "^4.21.1",
@@ -30,5 +30,17 @@
     "ramda": "^0.31.3",
     "socket.io": "^4.8.1",
     "supertest": "^7.0.0"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Draglon/be_inventory.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Draglon/be_inventory/issues"
+  },
+  "homepage": "https://github.com/Draglon/be_inventory#readme"
 }
