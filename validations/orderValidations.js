@@ -1,6 +1,6 @@
 import { body } from 'express-validator'
 
 export const orderValidation = [
-  body('title', 'Укажите название ордера').required(),
-  body('description', 'Укажите описание ордера').required(),
+  body('title', 'Specify the order name').required(),
+  body('description', 'Please provide a description of the order').required(),
 ]

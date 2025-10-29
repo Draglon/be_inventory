@@ -5,15 +5,15 @@ import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 
+import { MONGO_URI, PORT, CORS_URL } from "./lib/constants/index.js";
 import { currentTime } from "./lib/dateTime.js";
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
 import { registerValidation, loginValidation } from "./validations/userValidations.js";
 import { UserController, ProductController, OrderController } from "./controllers/index.js";
 
 // Connecting to a database
-const dbUrl = process.env.MONGO_URI || 'mongodb+srv://admin:draglon750@cluster0.znj5tnf.mongodb.net/Inventory?retryWrites=true&w=majority&appName=Cluster0';
 mongoose
-  .connect(dbUrl, {
+  .connect(MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
@@ -30,26 +30,22 @@ app.use(cors()); // CORS
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-      origin: "http://localhost:3000",
+      origin: CORS_URL,
       methods: ["GET", "POST"],
       credentials: true
   }
 });
 
 io.on('connection', (socket) => {
-  console.log('Новый клиент подключился');
+  console.log('Socket is connected');
 
-  // Отправляем текущее время клиенту при подключении
   socket.emit('currentTime', currentTime());
-
-  // Периодическая отправка времени (например, каждую 1 секунду)
   const timeInterval = setInterval(() => {
     socket.emit('currentTime', currentTime());
-  }, 1000); // 1000 мс = 1 секунда
+  }, 1000);
 
-  // Очистка интервала при отключении клиента
   socket.on('disconnect', () => {
-    console.log('Клиент отключился');
+    console.log('Socket is disconnected');
     clearInterval(timeInterval);
   });
 });
@@ -76,11 +72,9 @@ app.post('/orders', checkAuth, OrderController.create)
 app.delete('/orders/:id', checkAuth, OrderController.deleteOrder)
 
 // Start server
-const PORT = process.env.PORT || 4004;
 server.listen(PORT, (error) => {
   if (error) {
     return console.log(error);
   }
-
   console.log('Server OK')
 });
