@@ -5,7 +5,7 @@ import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 
-import { MONGO_URI, PORT, CORS_URL } from "./lib/constants/index.js";
+import { MONGO_URI, PORT } from "./lib/constants/index.js";
 import { currentTime } from "./lib/dateTime.js";
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
 import { registerValidation, loginValidation } from "./validations/userValidations.js";
@@ -30,7 +30,7 @@ app.use(cors()); // CORS
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-      origin: CORS_URL,
+      origin: "*", // CORS_URL,
       methods: ["GET", "POST"],
       allowedHeaders: ["strict-origin-when-cross-origin"],
       credentials: true
