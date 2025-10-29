@@ -32,6 +32,7 @@ const io = new Server(server, {
   cors: {
       origin: CORS_URL,
       methods: ["GET", "POST"],
+      allowedHeaders: ["strict-origin-when-cross-origin"],
       credentials: true
   }
 });
